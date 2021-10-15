@@ -1,0 +1,38 @@
+# Template file for 'libx86emu'
+pkgname=libx86emu
+version=3.3
+revision=1
+build_style=gnu-makefile
+make_check_target=test
+make_install_args="LIBDIR=/usr/lib"
+checkdepends="perl nasm"
+short_desc="X86 emulation library"
+maintainer="meator <meator.dev@gmail.com>"
+license="MIT" # Old Style with legal disclaimer
+homepage="https://github.com/wfeldt/libx86emu"
+distfiles="https://github.com/wfeldt/libx86emu/archive/refs/tags/${version}.tar.gz"
+checksum=fc043d1229b2fc8215e7fce972640baba86b42a0560069a737a10d013f2d8f02
+
+do_configure() {
+	rm git2log
+	echo ${version} > VERSION
+}
+
+post_build() {
+	if [ "$XBPS_CHECK_PKGS" ]; then
+		make -C test x86test
+	fi
+}
+
+post_install() {
+	vlicense LICENSE
+}
+
+libx86emu-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove "usr/lib/*.so"
+	}
+}
