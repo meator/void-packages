@@ -1,0 +1,26 @@
+# Template file for 'hwinfo'
+pkgname=hwinfo
+version=21.77
+revision=1
+build_style=gnu-makefile
+make_use_env=yes
+make_build_args="HWINFO_VERSION=${version}"
+make_install_args="HWINFO_VERSION=${version}"
+hostmakedepends="perl flex"
+makedepends="libx86emu-devel libuuid-devel"
+short_desc="Hardware information tool"
+maintainer="meator <meator.dev@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/openSUSE/hwinfo"
+distfiles="https://github.com/openSUSE/hwinfo/archive/refs/tags/${version}.tar.gz"
+checksum=4636e776303e2ba5bed47d42a4d03164914649f866334a663ae72d36180a5ae1
+nocross="hwinfo executes several times things that is compiles for generating files"
+disable_parallel_build=yes
+
+post_install() {
+	mv ${DESTDIR}/usr/sbin ${DESTDIR}/usr/bin
+
+	for m in doc/*.[1-9]; do
+		vman ${m}
+	done
+}
