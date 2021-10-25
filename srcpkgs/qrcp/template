@@ -1,0 +1,16 @@
+# Template file for 'qrcp'
+pkgname=qrcp
+version=0.8.4
+revision=1
+build_style=go
+go_import_path=github.com/claudiodangelis/qrcp
+short_desc="Transfer files over wifi to mobile devices by scanning a QR code"
+maintainer="meator <meator.dev@gmail.com>"
+license="MIT"
+homepage="https://claudiodangelis.com/qrcp/"
+distfiles="https://github.com/claudiodangelis/qrcp/archive/refs/tags/${version}.tar.gz"
+checksum=b77673bad880c9ffec1fa20cef6e46ae717702edd95bca3076919225e396db57
+
+post_install() {
+	vlicense LICENSE
+}
