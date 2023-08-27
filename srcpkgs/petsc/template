@@ -1,0 +1,137 @@
+# Template file for 'petsc'
+pkgname=petsc
+version=3.20.5
+revision=1
+build_style=gnu-configure
+hostmakedepends="python3 gcc-fortran openmpi python3-Cython"
+makedepends="openmpi-devel libopenmpi lapack-devel python3-mpi4py python3-numpy
+ python3-devel"
+checkdepends="openssh"
+short_desc="Portable, Extensible Toolkit for Scientific Computation"
+maintainer="meator <meator.dev@gmail.com>"
+license="BSD-2-Clause"
+homepage="https://petsc.org/release/"
+distfiles="https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-with-docs-${version}.tar.gz"
+#build_options="use_fortran"
+#build_options_default="use_fortran"
+#desc_option_use_fortran="Enable Fortran bindings (disables cross)"
+checksum=55b086cd75f0377708fa9463c219cad7ce933f71b7e84aa18c5bbc646de7a5a4
+python_version=3
+nocross="Cross version of openmpi doesn't support fortran"
+
+do_configure() {
+	# nocross is set, so this logic is unnecessary.
+	#if [ "$CROSS_BUILD" ]; then
+	#	SKIP_CHECKS="--with-batch"
+	#fi
+
+	# Add flags necessary for mpicc
+	#env -u CC -u CXX -u FC -u CFLAGS -u CXXFLAGS -u FFLAGS -u CPP -u CPPFLAGS\
+	#	-u LDFLAGS -u AR -u RANLIB\
+	#    OMPI_CPPFLAGS="$CPPFLAGS" OMPI_LDFLAGS="$LDFLAGS" OMPI_CC="$CC"\
+	#    OMPI_CFLAGS="$CFLAGS" OMPI_CXX="$CXX" OMPI_CXXFLAGS="$CXXFLAGS"\
+	#    OMPI_FC="$FC" OMPI_FCFLAGS="$FCFLAGS"\
+
+	################## Clearing the enviromnent makes the warnings go away.
+	#################env -u CC -u CXX -u FC -u CFLAGS -u CXXFLAGS -u FFLAGS -u CPP -u CPPFLAGS\
+	#################	-u LDFLAGS -u AR -u RANLIB\
+	#################./configure ${configure_args} CC="$(command -v mpicc)"\
+	#################CXX="$(command -v mpicxx)" FC="$(command -v mpifort)" CFLAGS="$CFLAGS"\
+	#################CXXFLAGS="$CXXFLAGS" FFLAGS="$FFLAGS" CPP="$CPP" CPPFLAGS="$CPPFLAGS"\
+	#################LDFLAGS="$LDFLAGS" AR="$AR" RANLIB="$RANLIB" PETSC_ARCH="void-linux"
+	#env -u CC -u CXX -u FC -u CFLAGS -u CXXFLAGS -u FFLAGS -u CPP -u CPPFLAGS \
+	#	-u LDFLAGS -u AR -u RANLIB\
+	#	./configure $SKIP_CHECKS ${configure_args} CC="$CC" CXX="$CXX" FC="$FC"\
+	#	CFLAGS="$(pkg-config --define-variable=prefix=$XBPS_CROSS_BASE ompi-c --cflags --libs) $CFLAGS"\
+	#	CXXFLAGS="$(pkg-config --define-variable=prefix=$XBPS_CROSS_BASE ompi-cxx --cflags --libs) $CXXFLAGS"\
+	#	FFLAGS="$(pkg-config --define-variable=prefix=$XBPS_CROSS_BASE ompi-fort --cflags --libs) $FFLAGS"\
+	#	CPP="$CPP" CPPFLAGS="$CPPFLAGS" LDFLAGS="$LDFLAGS" AR="$AR"\
+	#	RANLIB="$RANLIB" PETSC_ARCH="void-linux"
+
+	# Clearing the enviromnent makes the warnings go away.
+	##env -u CC -u CXX -u FC -u CFLAGS -u CXXFLAGS -u FFLAGS -u CPP -u CPPFLAGS\
+	##	-u LDFLAGS -u AR -u RANLIB\
+	##./configure ${configure_args} --CC="$CC" --CXX="$CXX" --FC="$FC"\
+	##--CFLAGS="$CFLAGS" --CXXFLAGS="$CXXFLAGS" --FFLAGS="$FFLAGS -I/usr/include" --CPP="$CPP"\
+	##--CPPFLAGS="$CPPFLAGS" --LDFLAGS="$LDFLAGS" --AR="$AR" --RANLIB="$RANLIB"
+
+	#env -u CC -u CXX -u FC -u CFLAGS -u CXXFLAGS -u FFLAGS -u CPP -u CPPFLAGS\
+	#	-u LDFLAGS -u AR -u RANLIB\
+	#./configure ${configure_args} CC="$CC" CXX="$CXX" FC="$FC"\
+	#CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" FFLAGS="$FFLAGS" CPP="$CPP"\
+	#CPPFLAGS="$CPPFLAGS" LDFLAGS="$LDFLAGS" AR="$AR" RANLIB="$RANLIB"
+
+	#env -u CC -u CXX -u FC -u CFLAGS -u CXXFLAGS -u FFLAGS -u CPP -u CPPFLAGS\
+	#	-u LDFLAGS -u AR -u RANLIB\
+	#    OMPI_CC="$CC" OMPI_CXX="$CXX" OMPI_FC="$FC"\
+	#./configure ${configure_args} --with-cc=mpicc --with-cxx=mpicxx\
+	#--with-fc=mpif90 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" CPP="$CPP"\
+	#CPPFLAGS="$CPPFLAGS" LDFLAGS="$LDFLAGS" AR="$AR" RANLIB="$RANLIB"
+
+	# Clearing the enviromnent makes configure warnings go away.
+	env -u CC -u CXX -u FC -u CFLAGS -u CXXFLAGS -u FFLAGS -u CPP -u CPPFLAGS\
+		-u LDFLAGS -u AR -u RANLIB\
+		OMPI_CC="$CC" OMPI_CXX="$CXX" OMPI_FC="$FC"\
+	./configure $SKIP_CHECKS ${configure_args} --with-cc=mpicc\
+	--with-cxx=mpicxx --with-fc=mpif90 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS"\
+	CPPFLAGS="$CPPFLAGS" FFLAGS="-I$XBPS_CROSS_BASE/usr/include $FFLAGS"\
+	LDFLAGS="$LDFLAGS" AR="$AR" RANLIB="$RANLIB" PETSC_ARCH="void-linux"
+}
+
+pre_build() {
+	export OMPI_CC="$CC" OMPI_CXX="$CXX" OMPI_FC="$FC"
+}
+
+#post_build() {
+#	(cd src/binding/petsc4py && )
+#}
+
+#pre_install() {
+	#export INSTALLOPT=${DESTDIR}${py3_sitelib}
+	#(cd src/binding/petsc4py && python3 setup.py install --prefix=/usr --root=${DESTDIR})
+#}
+
+post_install() {
+	(
+		cd src/binding/petsc4py
+		export DESTDIR="$DESTDIR" PETSC_DIR="$DESTDIR/usr/" PETSC_ARCH="void-linux"
+		python3 setup.py build
+		python3 setup.py install --prefix=/usr --root=${DESTDIR}
+	)
+	vsed -i "${DESTDIR}/${py3_sitelib}/petsc4py/lib/petsc.cfg" -e 's|/destdir/petsc-[^/]*/usr|/usr|'
+	rm ${DESTDIR}/usr/lib/petsc/conf/uninstall.py
+
+	mkdir -p ${DESTDIR}/usr/share/doc
+	cp -r docs ${DESTDIR}/usr/share/doc/petsc
+	rm ${DESTDIR}/usr/share/doc/petsc/.buildinfo
+
+	vlicense LICENSE
+}
+
+petsc-devel_package() {
+	short_desc+=" - development files"
+	depends="${sourcepkg}>=${version}_${revision} openmpi-devel"
+	pkg_install() {
+		vmove usr/include
+		vmove "usr/lib/*.so"
+		# XXX add the other symlink
+		vmove usr/lib/pkgconfig
+		vmove usr/lib/petsc
+		vmove usr/share/petsc
+	}
+}
+
+petsc-doc_package() {
+	nostrip=yes # no executables here
+	short_desc+=" - documentation"
+	pkg_install() {
+		vmove usr/share/doc/petsc
+	}
+}
+
+python3-petsc4py_package() {
+	short_desc+=" - python binding"
+	pkg_install() {
+		vmove "$py3_lib"
+	}
+}
