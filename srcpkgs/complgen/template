@@ -1,0 +1,34 @@
+# Template file for 'complgen'
+pkgname=complgen
+version=0.1.8
+revision=1
+build_style=cargo
+short_desc="Generate bash/fish/zsh completions from a single declarative grammar"
+maintainer="meator <meator.dev@gmail.com>"
+license="Apache-2.0"
+homepage="https://github.com/adaszko/complgen"
+changelog="https://raw.githubusercontent.com/adaszko/complgen/master/CHANGELOG.md"
+distfiles="https://github.com/adaszko/complgen/archive/refs/tags/v${version}.tar.gz"
+checksum=1f30f6ff09f188bd186129c09873a554b6ee635aaeaab84bd3827c7a9c2aaecb
+
+if [ "$CROSS_BUILD" ]; then
+	hostmakedepends="complgen"
+fi
+
+post_install() {
+    if [ "$CROSS_BUILD" ]; then
+        for file in /usr/share/bash-completion/completions/complgen \
+            /usr/share/fish/vendor_completions.d/complgen.fish \
+            /usr/share/zsh/site-functions/_complgen; do
+            vinstall $file 644 $file
+        done
+    else
+        "${DESTDIR}/usr/bin/complgen" aot usage/complgen.usage --bash-script complgen.bash
+        "${DESTDIR}/usr/bin/complgen" aot usage/complgen.usage --fish-script complgen.fish
+        "${DESTDIR}/usr/bin/complgen" aot usage/complgen.usage --zsh-script complgen.zsh
+
+        vcompletion complgen.bash bash
+        vcompletion complgen.fish fish
+        vcompletion complgen.zsh zsh
+    fi
+}
