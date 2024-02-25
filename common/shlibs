@@ -1679,6 +1679,7 @@ libvtv.so.0 libvtv-6.3.0_1
 libatomic.so.1 libatomic-4.9.0_1
 libpcsclite.so.1 libpcsclite-1.8.11_1
 libpcscspy.so.0 libpcsclite-1.8.11_1
+libonig.so.5 oniguruma-6.9.9_1
 libBulletDynamics.so.3.17 bullet-3.17_1
 libBulletCollision.so.3.17 bullet-3.17_1
 libLinearMath.so.3.17 bullet-3.17_1
