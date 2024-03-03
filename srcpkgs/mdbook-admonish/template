@@ -1,0 +1,16 @@
+# Template file for 'mdbook-admonish'
+pkgname=mdbook-admonish
+version=1.19.0
+revision=1
+build_style=cargo
+short_desc="Preprocessor for mdbook to add Material Design admonishments"
+maintainer="meator <meator.dev@gmail.com>"
+license="MIT"
+homepage="https://github.com/tommilligan/mdbook-admonish"
+changelog="https://raw.githubusercontent.com/tommilligan/mdbook-admonish/main/CHANGELOG.md"
+distfiles="https://github.com/tommilligan/mdbook-admonish/archive/refs/tags/v${version}.tar.gz"
+checksum=88f821c8eef74868181acaacfeab311c9d160986a8e688bd63c9a437d2328758
+
+post_install() {
+	vlicense LICENSE
+}
